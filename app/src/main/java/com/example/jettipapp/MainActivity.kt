@@ -153,7 +153,10 @@ fun BillForm(
                             imageVector = Icons.Default.Remove,
                             onClick = {  }
                         )
-                        Text(text = totalBillState.value)
+                        Text(
+                            text = totalBillState.value,
+                            modifier = modifier.padding(horizontal = 9.dp)
+                        )
                         RoundIconButton(
                             imageVector = Icons.Default.Add,
                             onClick = {  }
