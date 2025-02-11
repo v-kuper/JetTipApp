@@ -1,22 +1,26 @@
 package com.example.jettipapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,8 +44,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApp {
-                TopHeader()
-                MainContent()
+                Column {
+                    TopHeader()
+                    MainContent()
+                }
             }
         }
     }
@@ -78,16 +84,25 @@ fun TopHeader(totalPerPerson: Double = 0.0) {
     }
 }
 
-//@Preview
 @Composable
 fun MainContent() {
+    BillForm(modifier = Modifier) { billAmt ->
+        Log.d("AMT", "MainContent: $billAmt")
+    }
+}
+
+@Composable
+fun BillForm(
+    modifier: Modifier,
+    onValChange: (value: String) -> Unit = {}
+) {
     val totalBillState = remember { mutableStateOf("") }
     val validState = remember(totalBillState.value) {
         totalBillState.value.trim().isNotEmpty()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Surface(modifier = Modifier
+    Surface(modifier = modifier
         .padding(2.dp)
         .fillMaxWidth(),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
@@ -95,7 +110,7 @@ fun MainContent() {
     ) {
         Column {
             InputField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
                 valueState = totalBillState,
                 labelId = "Enter Bill",
                 enabled = true,
@@ -103,7 +118,7 @@ fun MainContent() {
                 keyboardType = KeyboardType.Number,
                 onAction = KeyboardActions {
                     if (!validState) return@KeyboardActions
-                    // TODO: onValueChange
+                    onValChange(totalBillState.value.trim())
                     keyboardController?.hide()
                 }
             )
