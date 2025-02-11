@@ -7,17 +7,24 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -37,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jettipapp.components.InputField
 import com.example.jettipapp.ui.theme.JetTipAppTheme
+import com.example.jettipapp.widgest.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,7 +116,11 @@ fun BillForm(
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         border = BorderStroke(width = 1.dp, color = Color.LightGray)
     ) {
-        Column {
+        Column(
+            modifier = modifier.padding(6.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
             InputField(
                 modifier = modifier.fillMaxWidth(),
                 valueState = totalBillState,
@@ -122,6 +134,37 @@ fun BillForm(
                     keyboardController?.hide()
                 }
             )
+
+            if (validState) {
+                Row(
+                    modifier = modifier.padding(3.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(text = "Split",
+                        modifier = modifier.align(alignment = Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = modifier.width(120.dp))
+                    Row(
+                        modifier = modifier.padding(horizontal = 3.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RoundIconButton(
+                            imageVector = Icons.Default.Remove,
+                            onClick = {  }
+                        )
+                        Text(text = totalBillState.value)
+                        RoundIconButton(
+                            imageVector = Icons.Default.Add,
+                            onClick = {  }
+                        )
+                    }
+                }
+            } else {
+                Box() {
+
+                }
+            }
         }
     }
 }
